@@ -16,14 +16,15 @@ public class EnemySpawner : MonoBehaviour
     {
         var wait = new WaitForSeconds(_delay);
 
-        while (true)
+        while (isActiveAndEnabled)
         {
             yield return wait;
 
             int index = Random.Range(0, _spawnPoints.Length);
             Transform spawnPoint = _spawnPoints[index];
 
-            Instantiate(_enemy, spawnPoint.position, spawnPoint.rotation);
+            Enemy enemy = Instantiate(_enemy, spawnPoint.position, spawnPoint.rotation);
+            enemy.SetDirection(spawnPoint.forward);
         }
     }
 }
