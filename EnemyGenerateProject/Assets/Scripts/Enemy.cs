@@ -3,16 +3,26 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _speed;
+    [SerializeField] private ParticleSystem _effect;
 
-    private Vector3 _movementDirection;
+    private Transform _target;
 
     private void Update()
     {
-        transform.Translate(_movementDirection * _speed * Time.deltaTime, Space.World);
+        transform.position = Vector3.MoveTowards(transform.position, _target.position, _speed * Time.deltaTime);
+        transform.LookAt(_target);
     }
 
-    public void SetDirection(Vector3 direction)
+    public void SetTarget(Transform target)
     {
-        _movementDirection = direction.normalized;
+        _target = target;
+    }
+
+    public void Die()
+    {
+        Instantiate(_effect, transform.position, Quaternion.identity);
+
+        _effect.Play();
+        Destroy(gameObject);
     }
 }
